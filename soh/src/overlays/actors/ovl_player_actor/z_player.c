@@ -3520,6 +3520,10 @@ s32 Player_CalculateTargetVelocityAndYaw(PlayState* play, Player* this, f32* tar
             *targetVelocity = (*targetVelocity * 0.14f) - (8.0f * slopeSpeedScale * slopeSpeedScale);
             *targetVelocity = CLAMP(*targetVelocity, 0.0f, speedLimit);
 
+            if (CVarGetInteger("gMoonwalk", 0) && *targetVelocity > 0) {
+                *targetVelocity = -*targetVelocity;
+            }
+
             return 1;
         }
     }
@@ -11898,7 +11902,9 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
             } else {
                 if ((this->actor.parent == NULL) &&
                     ((play->sceneLoadFlag == 0x14) || (this->deathTimer != 0) || !Player_UpdateDamage(this, play))) {
-                    Player_SetupMidairBehavior(this, play);
+                    if (!CVarGetInteger("gDisableLedgeJump", 0)) {
+                        Player_SetupMidairBehavior(this, play);
+                    }
                 } else {
                     this->fallStartHeight = this->actor.world.pos.y;
                 }
