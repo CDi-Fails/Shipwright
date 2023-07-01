@@ -254,7 +254,7 @@ static std::map<uint8_t, CommandCreator> kCommands {
 	CMD_ONE_SHOT_CVAR(CMD_ID++, "gShuffleItems"),
 	CMD_TIMED_BOOL_CVAR(CMD_ID++, "gMoonwalk"),
 	CMD_TIMED_BOOL_CVAR(CMD_ID++, "gDisableLedgeJump"),
-	CMD_TIMED_BOOL_CVAR(CMD_ID++, "gRandomSfx"),
+	CMD_TIMED_BOOL_CVAR(CMD_ID++, "gChaosRedeem"),
 
 	// CMD_TAKE_AMMO(0x80, ITEM_BOMBCHU),
 	// CMD_TAKE_AMMO(0x81, ITEM_STICK),
@@ -474,7 +474,7 @@ extern "C" {
 		CVarSetInteger("gNoWater", 0);
 		CVarSetInteger("gMoonwalk", 0);
 		CVarSetInteger("gDisableLedgeJump", 0);
-		CVarSetInteger("gRandomSfx", 0);
+		CVarSetInteger("gChaosRedeem", 0);
 	}
 
 	void Chaos_Init() {

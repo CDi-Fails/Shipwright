@@ -994,7 +994,7 @@ s32 func_8008FCC8(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
         static f32 scuffScales[PLAYER_LIMB_MAX] = { 0.0f };
         static u8 i = 0;
 
-        if (CVarGetInteger("gPogoStick", 0)) {
+        if (CVarGetInteger("gPogoStick", 0) || (CVarGetInteger("gChaosRedeem", 0) && Rand_ZeroOne() < 0.1f)) {
             switch (limbIndex) {
                 case PLAYER_LIMB_R_FOOT:
                 case PLAYER_LIMB_R_THIGH:
@@ -1009,7 +1009,7 @@ s32 func_8008FCC8(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
                 
             }
         } else {
-            if (CVarGetInteger("gScuffedLink", 0)) {
+            if (CVarGetInteger("gScuffedLink", 0) || (CVarGetInteger("gChaosRedeem", 0) && Rand_ZeroOne() < 0.1f)) {
                 if (i < PLAYER_LIMB_MAX) {
                     scuffScales[limbIndex] = (Rand_ZeroOne() + 0.01f) * 2.0f;
                     i++;
@@ -1020,7 +1020,7 @@ s32 func_8008FCC8(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
             }
         }
 
-        if (CVarGetInteger("gThiccLink", 0)) {
+        if (CVarGetInteger("gThiccLink", 0) || (CVarGetInteger("gChaosRedeem", 0) && Rand_ZeroOne() < 0.1f)) {
             if (limbIndex == PLAYER_LIMB_WAIST) {
                 Matrix_Scale(2.0f, 2.0f, 2.0f, MTXMODE_APPLY);
             }
@@ -1029,7 +1029,7 @@ s32 func_8008FCC8(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
             }
         }
 
-        if (CVarGetInteger("gFlipLink", 0)) {
+        if (CVarGetInteger("gFlipLink", 0) || (CVarGetInteger("gChaosRedeem", 0) && Rand_ZeroOne() < 0.1f)) {
             Matrix_Scale(1.0f, -1.0f, 1.0f, MTXMODE_APPLY);
         }
 
@@ -1042,10 +1042,10 @@ s32 func_8008FCC8(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
                 } else if (scale < 1.0f) {
                     Matrix_Translate((LINK_IS_ADULT ? 3600.0f : 2900.0f) * ABS(scale - 1.0f), 0.0f, 0.0f, MTXMODE_APPLY);
                 }
-            } else if (CVarGetInteger("gBigHead", 0)) {
+            } else if (CVarGetInteger("gBigHead", 0) || (CVarGetInteger("gChaosRedeem", 0) && Rand_ZeroOne() < 0.1f)) {
                 Matrix_Scale(3.0f, 3.0f, 3.0f, MTXMODE_APPLY);
                 Matrix_Translate(-1000.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-            } else if (CVarGetInteger("gTinyHead", 0)) {
+            } else if (CVarGetInteger("gTinyHead", 0) || (CVarGetInteger("gChaosRedeem", 0) && Rand_ZeroOne() < 0.1f)) {
                 Matrix_Scale(0.65f, 0.65f, 0.65f, MTXMODE_APPLY);
                 Matrix_Translate(800.0f, 0.0f, 0.0f, MTXMODE_APPLY);
             }

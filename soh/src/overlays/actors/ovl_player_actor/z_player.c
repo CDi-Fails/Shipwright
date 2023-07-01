@@ -3520,7 +3520,7 @@ s32 Player_CalculateTargetVelocityAndYaw(PlayState* play, Player* this, f32* tar
             *targetVelocity = (*targetVelocity * 0.14f) - (8.0f * slopeSpeedScale * slopeSpeedScale);
             *targetVelocity = CLAMP(*targetVelocity, 0.0f, speedLimit);
 
-            if (CVarGetInteger("gMoonwalk", 0) && *targetVelocity > 0) {
+            if ((CVarGetInteger("gMoonwalk", 0) || (CVarGetInteger("gChaosRedeem", 0) && Rand_ZeroOne() < 0.02f)) && *targetVelocity > 0) {
                 *targetVelocity = -*targetVelocity;
             }
 
@@ -5571,10 +5571,10 @@ s32 Player_SetupMidairJumpSlash(Player* this, PlayState* play) {
 
 void Player_SetupRolling(Player* this, PlayState* play) {
     // Chaos
-    if (CVarGetInteger("gExplodingRolls", 0)) {
+    if (CVarGetInteger("gExplodingRolls", 0) || (CVarGetInteger("gChaosRedeem", 0) && Rand_ZeroOne() < 0.05f)) {
         Player_SpawnExplosion(play, this);
     }
-    if (CVarGetInteger("gFreezingRolls", 0)) {
+    if (CVarGetInteger("gFreezingRolls", 0) || (CVarGetInteger("gChaosRedeem", 0) && Rand_ZeroOne() < 0.05f)) {
         this->actor.colChkInfo.damage = 0;
         Player_SetupDamage(play, this, PLAYER_DMGREACTION_FROZEN, 0.0f, 0.0f, 0, 20);
     }
@@ -5723,9 +5723,9 @@ void Player_ClearLookAndAttention(Player* this, PlayState* play) {
 }
 
 s32 Player_SetupRollOrPutAway(Player* this, PlayState* play) {
-    if (CVarGetInteger("gSonicRoll", 0)) {
+    if (CVarGetInteger("gSonicRoll", 0) || (CVarGetInteger("gChaosRedeem", 0) && Rand_ZeroOne() < 0.02f)) {
         Player_SetupRolling(this, play);
-    } else if (CVarGetInteger("gPogoStick", 0)) {
+    } else if (CVarGetInteger("gPogoStick", 0) || (CVarGetInteger("gChaosRedeem", 0) && Rand_ZeroOne() < 0.02f)) {
         // Hopping
         Player_SetupJump(this, &gPlayerAnim_link_normal_jump, REG(69) / 100.0f, play);
         Player_SetupBackflipOrSidehop(this, play, 0);
@@ -10973,7 +10973,7 @@ void Player_SpawnExplosion(PlayState* play, Player* this) {
 void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
     s32 pad;
 
-    if (CVarGetInteger("gForceUnequip", 0)) {
+    if (CVarGetInteger("gForceUnequip", 0) || (CVarGetInteger("gChaosRedeem", 0) && Rand_ZeroOne() < 0.02f)) {
         Player_UnequipItem(play, this);
         for (s32 i = 1; i < ARRAY_COUNT(gSaveContext.equips.buttonItems); i++) {
             gSaveContext.equips.buttonItems[i] = ITEM_NONE;
@@ -10981,7 +10981,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
         CVarSetInteger("gForceUnequip", 0);
     }
 
-    if (CVarGetInteger("gShuffleItems", 0)) {
+    if (CVarGetInteger("gShuffleItems", 0) || (CVarGetInteger("gChaosRedeem", 0) && Rand_ZeroOne() < 0.02f)) {
         u8 items[3] = { ITEM_NONE };
         u8 originalItems[3] = { ITEM_NONE };
         u8 unshuffledItems =  0;
@@ -11016,7 +11016,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
         }
     }
 
-    if (CVarGetInteger("gRandoMagic", 0) && gSaveContext.magicLevel > 0) {
+    if ((CVarGetInteger("gRandoMagic", 0) || (CVarGetInteger("gChaosRedeem", 0) && Rand_ZeroOne() < 0.02f)) && gSaveContext.magicLevel > 0) {
         // Randomize magic based on max
         if (gSaveContext.isDoubleMagicAcquired) {
             gSaveContext.magic = 0x60 * Rand_ZeroOne();
@@ -11072,7 +11072,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
     #define FLASH_TIME 120
     static s16 flashTimer = FLASH_TIME;
 
-    if (CVarGetInteger("gFlashbang", 0)) {
+    if (CVarGetInteger("gFlashbang", 0) || (CVarGetInteger("gChaosRedeem", 0) && Rand_ZeroOne() < 0.02f)) {
         if (flashTimer == FLASH_TIME) {
             Audio_PlayActorSound2(&this->actor, NA_SE_IT_EXPLOSION_LIGHT);
             play->envCtx.fillScreen = true;
@@ -11514,7 +11514,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
 
     static u8 forcedSandstormOn = false;
 
-    if (CVarGetInteger("gSandstorm", 0)) {
+    if (CVarGetInteger("gSandstorm", 0) || (CVarGetInteger("gChaosRedeem", 0) && Rand_ZeroOne() < 0.02f)) {
         play->envCtx.sandstormState = 3;
         forcedSandstormOn = true;
     }
@@ -11523,7 +11523,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
         forcedSandstormOn = false;
     }
 
-    if (CVarGetInteger("gNaviSpam", 0)) {
+    if (CVarGetInteger("gNaviSpam", 0) || (CVarGetInteger("gChaosRedeem", 0) && Rand_ZeroOne() < 0.02f)) {
         if (!(play->state.frames % 10)) {
             Audio_PlaySoundGeneral(NA_SE_VO_NAVY_CALL, &D_801333D4, 4, &D_801333E0, &D_801333E0, &D_801333E8);
         }
@@ -11537,7 +11537,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
         CVarSetInteger("gSpawnExplosion", 0);
     };
 
-    if (CVarGetInteger("gDisableEnemyDraw", 0) && this->targetActor != NULL) {
+    if ((CVarGetInteger("gDisableEnemyDraw", 0) || (CVarGetInteger("gChaosRedeem", 0) && Rand_ZeroOne() < 0.02f)) && this->targetActor != NULL) {
         if (this->targetActor->category == ACTORCAT_ENEMY) {
             play->actorCtx.targetCtx.arrowPointedActor = NULL;
             this->targetActor = NULL;
@@ -11551,7 +11551,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
         Environment_AdjustLights(play, lightIntensity, this->actor.projectedPos.z + 600.0f, 0.2f, 0.5f);
     }
 
-    if (CVarGetInteger("gDarkenArea", 0)) {
+    if (CVarGetInteger("gDarkenArea", 0) || (CVarGetInteger("gChaosRedeem", 0) && Rand_ZeroOne() < 0.02f)) {
         adjustLight = true;
         Math_SmoothStepToF(&lightIntensity, 1.0f, 0.5f, 0.2f, 0.01f);
     }
@@ -11564,14 +11564,14 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
         }
     }
 
-    if (CVarGetInteger("gInvisPlayer", 0)) {
+    if (CVarGetInteger("gInvisPlayer", 0) || (CVarGetInteger("gChaosRedeem", 0) && Rand_ZeroOne() < 0.02f)) {
         this->actor.draw = NULL;
     }
     else {
         this->actor.draw = Player_Draw;
     }
 
-    if (CVarGetInteger("gChaosSpin", 0)) {
+    if (CVarGetInteger("gChaosSpin", 0) || (CVarGetInteger("gChaosRedeem", 0) && Rand_ZeroOne() < 0.02f)) {
         this->actor.shape.rot.x += DEGF_TO_BINANG(5.0f);
         this->actor.shape.rot.y += DEGF_TO_BINANG(9.0f);
         this->actor.shape.rot.z += DEGF_TO_BINANG(15.0f);
@@ -11591,7 +11591,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
 
     static u8 colorMode = 0;
 
-    if (CVarGetInteger("gRaveMode", 0)) {
+    if (CVarGetInteger("gRaveMode", 0) || (CVarGetInteger("gChaosRedeem", 0) && Rand_ZeroOne() < 0.02f)) {
         switch (colorMode) {
             case 0:
                 D_801614B0.r = 255;
