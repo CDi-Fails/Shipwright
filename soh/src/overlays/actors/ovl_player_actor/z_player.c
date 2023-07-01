@@ -10973,7 +10973,11 @@ void Player_SpawnExplosion(PlayState* play, Player* this) {
 void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
     s32 pad;
 
-    if (CVarGetInteger("gForceUnequip", 0) || (CVarGetInteger("gChaosRedeem", 0) && Rand_ZeroOne() < 0.02f)) {
+    if ((CVarGetInteger("gChaosRedeem", 0) && Rand_ZeroOne() < 0.05f)) {
+        CosmeticsEditor_RandomizeAll_C();
+    }
+
+    if (CVarGetInteger("gForceUnequip", 0) || (CVarGetInteger("gChaosRedeem", 0) && Rand_ZeroOne() < 0.005f)) {
         Player_UnequipItem(play, this);
         for (s32 i = 1; i < ARRAY_COUNT(gSaveContext.equips.buttonItems); i++) {
             gSaveContext.equips.buttonItems[i] = ITEM_NONE;
@@ -10981,7 +10985,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
         CVarSetInteger("gForceUnequip", 0);
     }
 
-    if (CVarGetInteger("gShuffleItems", 0) || (CVarGetInteger("gChaosRedeem", 0) && Rand_ZeroOne() < 0.02f)) {
+    if (CVarGetInteger("gShuffleItems", 0) || (CVarGetInteger("gChaosRedeem", 0) && Rand_ZeroOne() < 0.05f)) {
         u8 items[3] = { ITEM_NONE };
         u8 originalItems[3] = { ITEM_NONE };
         u8 unshuffledItems =  0;

@@ -1850,6 +1850,10 @@ void CosmeticsEditor_RandomizeAll() {
     ApplyOrResetCustomGfxPatches();
 }
 
+extern "C" void CosmeticsEditor_RandomizeAll_C() {
+    CosmeticsEditor_RandomizeAll();
+}
+
 void CosmeticsEditor_ResetAll() {
     for (auto& [id, cosmeticOption] : cosmeticOptions) {
         if (!CVarGetInteger(cosmeticOption.lockedCvar, 0)) {
